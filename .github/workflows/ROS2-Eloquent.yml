@@ -24,6 +24,8 @@ jobs:
               run: |
                   mkdir -p ~/ros2_ws/src/robotx_bt_planner
                   cp -rf . ~/ros2_ws/src/robotx_bt_planner
+                  mkdir -p ~/ros2_ws/src/robotx_behavior_tree
+                  cp -rf ../robotx_behavior_tree ~/ros2_ws/src/robotx_behavior_tree
             - name: Install dependencies
               run: |
                   source /opt/ros/eloquent/setup.bash
@@ -39,6 +41,7 @@ jobs:
                   # Ref: https://index.ros.org/doc/ros2/Tutorials/Colcon-Tutorial/
                   sudo apt install python3-colcon-common-extensions
                   cd ~/ros2_ws
+                  colcon build --packages-select robotx_behavior_tree
                   colcon build
                   source ~/ros2_ws/install/setup.bash
             - name: Test packages
