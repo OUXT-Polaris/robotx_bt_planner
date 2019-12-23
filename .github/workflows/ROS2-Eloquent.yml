@@ -25,7 +25,7 @@ jobs:
                   mkdir -p ~/ros2_ws/src/robotx_bt_planner
                   cp -rf . ~/ros2_ws/src/robotx_bt_planner
                   mkdir -p ~/ros2_ws/src/robotx_behavior_tree
-                  cp -rf ../robotx_behavior_tree ~/ros2_ws/src/robotx_behavior_tree
+                  git clone https://github.com/OUXT-Polaris/robotx_behavior_tree.git ~/ros2_ws/src/robotx_behavior_tree
             - name: Install dependencies
               run: |
                   source /opt/ros/eloquent/setup.bash
