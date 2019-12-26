@@ -11,7 +11,6 @@
 #include <memory>
 #include <chrono>
 
-
 namespace robotx_bt_planner
 {
 class BehaviorTreePlannerNode : public rclcpp::Node
@@ -20,14 +19,15 @@ public:
   BehaviorTreePlannerNode()
   : rclcpp::Node("robotx_bt_planner")
   {
+      using namespace std::chrono_literals;
     // 共有ライブラリからプラグインを読み込み
-//    factory.registerFromPlugin(
-//        "install/robotx_behavior_tree/lib/robotx_behavior_tree/"
-//        "librobotx_behavior_tree_node.so");
+    factory.registerFromPlugin(
+      "install/robotx_behavior_tree/lib/robotx_behavior_tree/"
+      "libexample_action.so");
     // Grootへ実行情報を送信する
     publisher_zmq = std::make_unique<BT::PublisherZMQ>(tree);
     timer = create_wall_timer(
-      500ms, std::bind(&MinimalExecutorNode::timerCallback, this));
+      500ms, std::bind(&BehaviorTreePlannerNode::timerCallback, this));
   }
 
 private:
