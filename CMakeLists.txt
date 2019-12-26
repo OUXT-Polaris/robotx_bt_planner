@@ -16,7 +16,7 @@ find_package(rclcpp REQUIRED)
 find_package(behaviortree_cpp_v3 REQUIRED)
 find_package(robotx_behavior_tree REQUIRED)
 
- include_directories(include ${CMAKE_CURRENT_BINARY_DIR})
+include_directories(include ${CMAKE_CURRENT_BINARY_DIR})
 #include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 add_executable(robotx_bt_planner_node

@@ -1,6 +1,17 @@
-/**
- * Copyright 2019 OUXT-Polaris
- */
+// Copyright (c) 2019, OUXT-Polaris
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 
 #ifndef ROBOTX_BT_PLANNER__ROBOTX_BT_PLANNER_HPP_
 #define ROBOTX_BT_PLANNER__ROBOTX_BT_PLANNER_HPP_
@@ -19,7 +30,7 @@ public:
   BehaviorTreePlannerNode()
   : rclcpp::Node("robotx_bt_planner")
   {
-      using namespace std::chrono_literals;
+    using std::chrono_literals::operator""ms;
     // 共有ライブラリからプラグインを読み込み
     factory.registerFromPlugin(
       "install/robotx_behavior_tree/lib/robotx_behavior_tree/"
