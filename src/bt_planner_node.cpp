@@ -13,15 +13,13 @@
 // limitations under the License.
 
 #include <rclcpp/rclcpp.hpp>
-#include <robotx_bt_planner/robotx_bt_planner.hpp>
+#include <robotx_bt_planner/bt_planner_component.hpp>
 #include <memory>
 
 int main(int argc, char ** argv)
 {
   rclcpp::init(argc, argv);
-  auto node = std::make_shared<robotx_bt_planner::BehaviorTreePlannerNode>();
-  rclcpp::spin(node->get_node_base_interface());
+  rclcpp::spin(std::make_shared<robotx_bt_planner::BTPlannerComponent>(rclcpp::NodeOptions()));
   rclcpp::shutdown();
-
   return 0;
 }
