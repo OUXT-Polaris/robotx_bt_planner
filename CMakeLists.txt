@@ -68,7 +68,7 @@ install(TARGETS bt_planner_node
 
 install(TARGETS bt_planner_component
   EXPORT export_${PROJECT_NAME}
-  DESTINATION lib/${PROJECT_NAME}
+  DESTINATION lib
 )
 ament_export_libraries(bt_planner_component)
 

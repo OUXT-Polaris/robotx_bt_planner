@@ -27,6 +27,7 @@ static const char* xml = R"(
         </BehaviorTree>
     </root>
 )";
+
 BTPlannerComponent::BTPlannerComponent(const rclcpp::NodeOptions & options)
 : rclcpp::Node("robotx_bt_planner", options)
 {
@@ -34,7 +35,7 @@ BTPlannerComponent::BTPlannerComponent(const rclcpp::NodeOptions & options)
   using std::chrono_literals::operator""ms;
   // 共有ライブラリからプラグインを読み込み
   factory.registerFromPlugin(
-    "/home/hans/ros2_eloquent_ws/install/robotx_behavior_tree/lib/robotx_behavior_tree/libexample_action.so");
+    "/home/hans/ros2_eloquent_ws/install/robotx_behavior_tree/lib/libexample_action.so");
   std::cout << factory.builders().size() << std::endl;
   tree = factory.createTreeFromText(xml);
   // Grootへ実行情報を送信する
