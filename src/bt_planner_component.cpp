@@ -12,23 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "robotx_bt_planner/bt_planner_component.hpp"
+#include <fstream>
 #include <memory>
+#include <string>
+
+#include "robotx_bt_planner/bt_planner_component.hpp"
+#include "ament_index_cpp/get_package_share_directory.hpp"
 
 namespace robotx_bt_planner
 {
-
-static const char * xml =
-  R"(
-    <root>
-        <BehaviorTree>
-            <Sequence>
-                <ExampleAction/>
-            </Sequence>
-        </BehaviorTree>
-    </root>
-)";
-
 BTPlannerComponent::BTPlannerComponent(const rclcpp::NodeOptions & options)
 : rclcpp::Node("robotx_bt_planner", options)
 {
@@ -42,11 +34,28 @@ BTPlannerComponent::BTPlannerComponent(const rclcpp::NodeOptions & options)
     std::cout << "  " << builder.first << std::endl;
   }
   std::cout << "=================================" << std::endl;
-  tree = factory.createTreeFromText(xml);
+
+  std::string bt_xml_filename = ament_index_cpp::get_package_share_directory("robotx_bt_planner") +
+    "/behavior_trees/" + "example.xml";
+  std::ifstream xml_file(bt_xml_filename);
+
+  if (!xml_file.good()) {
+    RCLCPP_ERROR(get_logger(), "Couldn't open input XML file: %s", bt_xml_filename.c_str());
+  }
+
+  auto xml_string = std::string(
+    std::istreambuf_iterator<char>(xml_file),
+    std::istreambuf_iterator<char>());
+
+  tree = factory.createTreeFromText(xml_string);
+
+  std::cout << "TREE CREATED" << std::endl;
   // Grootへ実行情報を送信する
   publisher_zmq = std::make_unique<BT::PublisherZMQ>(tree);
+  std::cout << "PUBLISHER CREATED" << std::endl;
   timer = create_wall_timer(
     500ms, std::bind(&BTPlannerComponent::timerCallback, this));
+  std::cout << "TIMER CREATED" << std::endl;
 }
 void BTPlannerComponent::timerCallback()
 {

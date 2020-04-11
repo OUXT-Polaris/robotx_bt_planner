@@ -73,6 +73,9 @@ ament_export_libraries(bt_planner_component)
 install(DIRECTORY "include/"
         DESTINATION include
 )
+
+install(DIRECTORY behavior_trees DESTINATION share/${PROJECT_NAME})
+
 ament_export_include_directories(include)
 
 if(BUILD_TESTING)
