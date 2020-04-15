@@ -50,8 +50,9 @@ void BTPlannerComponent::timerCallback()
 }
 bool BTPlannerComponent::loadPlugin(std::string plugin_name)
 {
-  std::string plugin_filename = ament_index_cpp::get_package_share_directory("robotx_behavior_tree") +
-                                "/../../lib/lib" + plugin_name + ".so";
+  std::string plugin_filename =
+    ament_index_cpp::get_package_share_directory("robotx_behavior_tree") +
+    "/../../lib/lib" + plugin_name + ".so";
   factory.registerFromPlugin(plugin_filename);
   return true;
 }
