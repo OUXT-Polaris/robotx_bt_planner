@@ -21,6 +21,7 @@
 #include <robotx_bt_planner/visibility.h>
 #include <chrono>
 #include <memory>
+#include <string>
 
 namespace robotx_bt_planner
 {
