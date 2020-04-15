@@ -32,6 +32,8 @@ public:
 
 private:
   void timerCallback();
+  bool loadPlugin(std::string);
+  bool loadTree(std::string);
 
   BT::BehaviorTreeFactory factory;
   BT::Tree tree;

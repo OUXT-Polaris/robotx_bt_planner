@@ -26,8 +26,7 @@ BTPlannerComponent::BTPlannerComponent(const rclcpp::NodeOptions & options)
 {
   using std::chrono_literals::operator""ms;
   // 共有ライブラリからプラグインを読み込み
-  factory.registerFromPlugin(
-    "/home/hans/ros2_eloquent_ws/install/robotx_behavior_tree/lib/libexample_action.so");
+  loadPlugin("example_action");
   std::cout << "REGISTERED PLUGINS : " << std::endl;
   std::cout << "=================================" << std::endl;
   for (auto builder : factory.builders()) {
@@ -35,20 +34,7 @@ BTPlannerComponent::BTPlannerComponent(const rclcpp::NodeOptions & options)
   }
   std::cout << "=================================" << std::endl;
 
-  std::string bt_xml_filename = ament_index_cpp::get_package_share_directory("robotx_bt_planner") +
-    "/behavior_trees/" + "example.xml";
-  std::ifstream xml_file(bt_xml_filename);
-
-  if (!xml_file.good()) {
-    RCLCPP_ERROR(get_logger(), "Couldn't open input XML file: %s", bt_xml_filename.c_str());
-  }
-
-  auto xml_string = std::string(
-    std::istreambuf_iterator<char>(xml_file),
-    std::istreambuf_iterator<char>());
-
-  tree = factory.createTreeFromText(xml_string);
-
+  loadTree("example");
   std::cout << "TREE CREATED" << std::endl;
   // Grootへ実行情報を送信する
   publisher_zmq = std::make_unique<BT::PublisherZMQ>(tree);
@@ -61,6 +47,31 @@ void BTPlannerComponent::timerCallback()
 {
   RCLCPP_INFO(this->get_logger(), "tick");
   tree.root_node->executeTick();
+}
+bool BTPlannerComponent::loadPlugin(std::string plugin_name)
+{
+  std::string plugin_filename = ament_index_cpp::get_package_share_directory("robotx_behavior_tree") +
+                                "/../../lib/lib" + plugin_name + ".so";
+  factory.registerFromPlugin(plugin_filename);
+  return true;
+}
+bool BTPlannerComponent::loadTree(std::string xml_name)
+{
+  std::string bt_xml_filename = ament_index_cpp::get_package_share_directory("robotx_bt_planner") +
+    "/behavior_trees/" + xml_name + ".xml";
+  std::ifstream xml_file(bt_xml_filename);
+
+  if (!xml_file.good()) {
+    RCLCPP_ERROR(get_logger(), "Couldn't open input XML file: %s", bt_xml_filename.c_str());
+    return false;
+  }
+
+  auto xml_string = std::string(
+    std::istreambuf_iterator<char>(xml_file),
+    std::istreambuf_iterator<char>());
+
+  tree = factory.createTreeFromText(xml_string);
+  return true;
 }
 }  // namespace robotx_bt_planner
 
