@@ -16,8 +16,8 @@ find_package(ament_index_cpp REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_components REQUIRED)
 find_package(behaviortree_cpp_v3 REQUIRED)
-find_package(robotx_behavior_tree REQUIRED)
 find_package(behavior_tree_action_builder REQUIRED)
+find_package(robotx_behavior_tree REQUIRED)
 find_package(ZeroMQ)
 
 include_directories(${ZMQ_INCLUDE_DIR})
@@ -38,8 +38,8 @@ ament_target_dependencies(bt_planner_component
         rclcpp
         rclcpp_components
         behaviortree_cpp_v3
-        robotx_behavior_tree
         behavior_tree_action_builder
+        robotx_behavior_tree
 )
 target_link_libraries(bt_planner_component ${behaviortree_cpp_v3_LIBRARIES} ${ZMQ_LIBRARIES})
 
@@ -57,8 +57,8 @@ ament_target_dependencies(
   bt_planner_node
   rclcpp
   behaviortree_cpp_v3
-  robotx_behavior_tree
   behavior_tree_action_builder
+  robotx_behavior_tree
 )
 
 target_link_libraries(bt_planner_node bt_planner_component)
