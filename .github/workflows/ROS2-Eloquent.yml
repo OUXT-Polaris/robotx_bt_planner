@@ -41,7 +41,6 @@ jobs:
                   # Ref: https://index.ros.org/doc/ros2/Tutorials/Colcon-Tutorial/
                   sudo apt install python3-colcon-common-extensions
                   cd ~/ros2_ws
-                  colcon build --packages-select robotx_behavior_tree
                   colcon build
                   source ~/ros2_ws/install/setup.bash
             - name: Test packages
