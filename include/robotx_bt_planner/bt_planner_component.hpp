@@ -18,10 +18,12 @@
 #include <behaviortree_cpp_v3/bt_factory.h>
 #include <behaviortree_cpp_v3/loggers/bt_zmq_publisher.h>
 #include <rclcpp/rclcpp.hpp>
-#include <robotx_bt_planner/visibility.h>
+
 #include <chrono>
 #include <memory>
 #include <string>
+
+#include "robotx_bt_planner/visibility.h"
 
 namespace robotx_bt_planner
 {
@@ -36,10 +38,10 @@ private:
   bool loadPlugin(std::string);
   bool loadTree(std::string);
 
-  BT::BehaviorTreeFactory factory;
-  BT::Tree tree;
-  rclcpp::TimerBase::SharedPtr timer;
-  std::unique_ptr<BT::PublisherZMQ> publisher_zmq;
+  BT::BehaviorTreeFactory factory_;
+  BT::Tree tree_;
+  rclcpp::TimerBase::SharedPtr timer_;
+  std::unique_ptr<BT::PublisherZMQ> publisher_zmq_;
 };
 }  // namespace robotx_bt_planner
 

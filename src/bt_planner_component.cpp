@@ -27,9 +27,10 @@ BTPlannerComponent::BTPlannerComponent(const rclcpp::NodeOptions & options)
   using std::chrono_literals::operator""ms;
   // 共有ライブラリからプラグインを読み込み
   loadPlugin("example_action");
+  loadPlugin("go_action");
   std::cout << "REGISTERED PLUGINS : " << std::endl;
   std::cout << "=================================" << std::endl;
-  for (auto builder : factory.builders()) {
+  for (auto builder : factory_.builders()) {
     std::cout << "  " << builder.first << std::endl;
   }
   std::cout << "=================================" << std::endl;
@@ -37,23 +38,26 @@ BTPlannerComponent::BTPlannerComponent(const rclcpp::NodeOptions & options)
   loadTree("example");
   std::cout << "TREE CREATED" << std::endl;
   // Grootへ実行情報を送信する
-  publisher_zmq = std::make_unique<BT::PublisherZMQ>(tree);
+  publisher_zmq_ = std::make_unique<BT::PublisherZMQ>(tree_);
   std::cout << "PUBLISHER CREATED" << std::endl;
-  timer = create_wall_timer(
+  timer_ = create_wall_timer(
     500ms, std::bind(&BTPlannerComponent::timerCallback, this));
   std::cout << "TIMER CREATED" << std::endl;
+
+
 }
 void BTPlannerComponent::timerCallback()
 {
-  RCLCPP_INFO(this->get_logger(), "tick");
-  tree.root_node->executeTick();
+  RCLCPP_INFO(this->get_logger(), "tick %d",tree_.nodes.size());
+
+  tree_.root_node->executeTick();
 }
 bool BTPlannerComponent::loadPlugin(std::string plugin_name)
 {
   std::string plugin_filename =
     ament_index_cpp::get_package_share_directory("robotx_behavior_tree") +
     "/../../lib/lib" + plugin_name + ".so";
-  factory.registerFromPlugin(plugin_filename);
+  factory_.registerFromPlugin(plugin_filename);
   return true;
 }
 bool BTPlannerComponent::loadTree(std::string xml_name)
@@ -71,7 +75,7 @@ bool BTPlannerComponent::loadTree(std::string xml_name)
     std::istreambuf_iterator<char>(xml_file),
     std::istreambuf_iterator<char>());
 
-  tree = factory.createTreeFromText(xml_string);
+  tree_ = factory_.createTreeFromText(xml_string);
   return true;
 }
 }  // namespace robotx_bt_planner
