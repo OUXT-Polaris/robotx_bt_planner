@@ -15,6 +15,7 @@
 #include <fstream>
 #include <memory>
 #include <string>
+#include <set>
 
 #include "robotx_bt_planner/bt_planner_component.hpp"
 #include "ament_index_cpp/get_package_share_directory.hpp"
@@ -35,6 +36,23 @@ BTPlannerComponent::BTPlannerComponent(const rclcpp::NodeOptions & options)
   }
   std::cout << "=================================" << std::endl;
 
+
+  // blackboard
+  blackboard_ = BT::Blackboard::create();
+
+  // client_node
+  auto client_options = rclcpp::NodeOptions().arguments(
+    {"--ros-args",
+      "-r", std::string("__node:=") + get_name() + "_client_node",
+      "--"}
+  );
+  client_node_ = std::make_shared<rclcpp::Node>("_", client_options);
+  blackboard_->set<rclcpp::Node::SharedPtr>("node", client_node_);
+
+  // server_timeout
+  blackboard_->set<std::chrono::milliseconds>("server_timeout", std::chrono::milliseconds(10));
+
+
   loadTree("example");
   std::cout << "TREE CREATED" << std::endl;
   // Grootへ実行情報を送信する
@@ -43,12 +61,10 @@ BTPlannerComponent::BTPlannerComponent(const rclcpp::NodeOptions & options)
   timer_ = create_wall_timer(
     500ms, std::bind(&BTPlannerComponent::timerCallback, this));
   std::cout << "TIMER CREATED" << std::endl;
-
-
 }
 void BTPlannerComponent::timerCallback()
 {
-  RCLCPP_INFO(this->get_logger(), "tick %d",tree_.nodes.size());
+  RCLCPP_INFO(this->get_logger(), "tick %d", tree_.nodes.size());
 
   tree_.root_node->executeTick();
 }
@@ -75,7 +91,7 @@ bool BTPlannerComponent::loadTree(std::string xml_name)
     std::istreambuf_iterator<char>(xml_file),
     std::istreambuf_iterator<char>());
 
-  tree_ = factory_.createTreeFromText(xml_string);
+  tree_ = factory_.createTreeFromText(xml_string, blackboard_);
   return true;
 }
 }  // namespace robotx_bt_planner

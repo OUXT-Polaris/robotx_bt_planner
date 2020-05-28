@@ -39,9 +39,11 @@ private:
   bool loadTree(std::string);
 
   BT::BehaviorTreeFactory factory_;
+  BT::Blackboard::Ptr blackboard_;
   BT::Tree tree_;
   rclcpp::TimerBase::SharedPtr timer_;
   std::unique_ptr<BT::PublisherZMQ> publisher_zmq_;
+  rclcpp::Node::SharedPtr client_node_;
 };
 }  // namespace robotx_bt_planner
 
