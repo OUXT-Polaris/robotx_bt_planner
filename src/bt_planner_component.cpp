@@ -66,7 +66,7 @@ void BTPlannerComponent::timerCallback()
 {
   RCLCPP_INFO(this->get_logger(), "tick %d", tree_.nodes.size());
 
-  tree_.rootNode->executeTick();
+  tree_.rootNode()->executeTick();
 }
 bool BTPlannerComponent::loadPlugin(std::string plugin_name)
 {
